@@ -131,12 +131,17 @@ KindEditor.plugin('insertfile', function(K) {
 		self.plugin.fileDialog({
 			clickFn : function(url, title) {
 				var html = '<a class="ke-insertfile" href="' + url + '" data-ke-src="' + url + '" target="_blank">' + title + '</a>';
-				$("#att").show();				
 				var extStart=url.lastIndexOf(".")+1; 
 				var ext=url.substring(extStart,url.length).toUpperCase(); 
-				var typeInput = '<input id="fileUrl" name="article[fileUrl]" type="hidden" value="'+url+'" />';
-				var urlInput = '<input id="fileType" name="article[fileType]" type="hidden" value="'+ext+'" />';
-				$(".att").html(typeInput+urlInput+html);
+				var mediaCanShow = ["PDF"];
+				var inPos = $.inArray(ext, mediaCanShow);
+				if(inPos!=-1)//非可播放的媒体类型，不提供自动播放
+				{
+					var typeInput = '<input id="fileUrl" name="article[fileUrl]" type="hidden" value="'+url+'" />';
+					var urlInput = '<input id="fileType" name="article[fileType]" type="hidden" value="'+ext+'" />';
+					$(".att").html(typeInput+urlInput+html);
+					$("#att").show();
+				}
 				self.insertHtml(html).hideDialog().focus();
 			}
 		});
